@@ -27,7 +27,7 @@ php artisan make:migration create_students_table
 ## Crear el Controller de Student
 
 ```
-php artisan make:migration create_students_table
+php artisan make:controller StudentController
 ```
 ## Guardar la migracion
 ```

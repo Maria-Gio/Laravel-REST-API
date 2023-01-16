@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -13,16 +12,15 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('mothers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 32);
             $table->string('phone', 16)->nullable();
             $table->unsignedInteger('age')->nullable();
-            $table->string('password', 64);
             $table->string('email', 32)->unique();
-            $table->string('sex', 16);
             $table->timestamps();
         });
+
     }
 
     /**
@@ -32,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('mothers');
     }
 };

@@ -165,4 +165,59 @@ class StudentController extends Controller
         return response()->json($response, 200);
 
     }
+    public function teacher(Request $request, $id)
+    {
+        if (Student::find($id)) {
+            $student = Student::find($id);
+            if ($student != null && $student->teacher) {
+                $response = [
+                    'success' => true,
+                    'message' => 'Teacher found successfully',
+                    'data' => $student->teacher
+                ];
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Teacher not found',
+                    'data' => null
+                ];
+            }
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Student not found',
+                'data' => null
+            ];
+        }
+
+        return response()->json($response);
+    }
+    public function mother(Request $request, $id)
+    {
+        if (Student::find($id)) {
+            $student = Student::find($id);
+
+            if ($student != null && $student->mother) {
+                $response = [
+                    'success' => true,
+                    'message' => 'Mother found successfully',
+                    'data' => $student->mother
+                ];
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Mother not found',
+                    'data' => null
+                ];
+            }
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Student not found',
+                'data' => null
+            ];
+        }
+
+        return response()->json($response);
+    }
 }

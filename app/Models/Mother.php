@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class Mother extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -13,21 +13,14 @@ class Student extends Model
         'phone',
         'age',
         'email',
-        'sex',
-        'password'
     ];
     protected $hidden = [
-        'password',
+
         'created_at',
         'updated_at'
     ];
-    public function mother()
+    public function student()
     {
-        return $this->hasOne(Mother::class);
+        return $this->belongsTo(Student::class);
     }
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class);
-    }
-
 }
