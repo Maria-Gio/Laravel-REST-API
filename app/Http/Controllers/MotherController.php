@@ -185,6 +185,6 @@ class MotherController extends Controller
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, 200);
     }
 }

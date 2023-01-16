@@ -177,7 +177,7 @@ class TeacherController extends Controller
                     'data' => null
                 ];
             }
-        }else{
+        } else {
             $response = [
                 'success' => false,
                 'message' => 'Teacher not found',
@@ -186,6 +186,6 @@ class TeacherController extends Controller
         }
 
 
-        return response()->json($teacher->students);
+        return response()->json($response, 200);
     }
 }

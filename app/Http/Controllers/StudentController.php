@@ -190,7 +190,7 @@ class StudentController extends Controller
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, 200);
     }
     public function mother(Request $request, $id)
     {
@@ -218,6 +218,6 @@ class StudentController extends Controller
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, 200);
     }
 }
