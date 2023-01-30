@@ -13,6 +13,7 @@ class Mother extends Model
         'phone',
         'age',
         'email',
+        'student_id',
     ];
     protected $hidden = [
 

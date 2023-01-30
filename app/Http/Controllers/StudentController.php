@@ -10,7 +10,7 @@ use Throwable;
 
 class StudentController extends Controller
 {
-    public function getAllStudents(Request $request)
+    public function getAll(Request $request)
     {
         try {
             $students = Student::all();
@@ -39,7 +39,7 @@ class StudentController extends Controller
         }
 
     }
-    public function createStudent(Request $request)
+    public function create(Request $request)
     {
         $id = null;
         try {
@@ -74,11 +74,10 @@ class StudentController extends Controller
 
 
     }
-    public function deleteStudent(Request $request, $id)
+    public function delete(Request $request, $id)
     {
-        try {
-            $deletedStudent = Student::find($id);
-
+        $deletedStudent = Student::find($id);
+        if ($deletedStudent) {
             $student = $deletedStudent;
             $student->delete();
             $response = [
@@ -87,10 +86,7 @@ class StudentController extends Controller
                 'data' => $deletedStudent
             ];
             return response()->json($response, 200);
-
-        } catch (Throwable $e) {
-            report($e);
-
+        } else {
             $response = [
                 'success' => false,
                 'message' => 'Student has not been deleted because it wasnt not found',
@@ -99,22 +95,23 @@ class StudentController extends Controller
             return response()->json($response, 200);
         }
 
-
     }
-    public function updateStudent(Request $request, $id)
+    public function update(Request $request, $id)
     {
 
-
-        if ($student = Student::find($id)) {
+        $student = Student::find($id);
+        if ($student) {
 
             try {
+                $idNew = $request->get('teacher_id');
                 $student->update($request->validate([
                     'name' => 'string',
                     'phone' => 'string',
                     'age' => 'integer',
                     'password' => 'string',
                     'email' => 'string|unique:students',
-                    'sex' => 'string'
+                    'sex' => 'string',
+                    'teacher_id'=>'integer'
                 ]));
             } catch (Throwable $e) {
                 report($e);
@@ -147,7 +144,6 @@ class StudentController extends Controller
     public function getById(Request $request, $id)
     {
         $student = Student::find($id);
-        // var_dump($student);
         if ($student != null) {
             $response = [
                 'success' => true,
@@ -167,8 +163,9 @@ class StudentController extends Controller
     }
     public function teacher(Request $request, $id)
     {
-        if (Student::find($id)) {
-            $student = Student::find($id);
+        $student = Student::find($id);
+        if ($student) {
+
             if ($student != null && $student->teacher) {
                 $response = [
                     'success' => true,
@@ -194,8 +191,9 @@ class StudentController extends Controller
     }
     public function mother(Request $request, $id)
     {
-        if (Student::find($id)) {
-            $student = Student::find($id);
+        $student = Student::find($id);
+        if ($student) {
+
 
             if ($student != null && $student->mother) {
                 $response = [

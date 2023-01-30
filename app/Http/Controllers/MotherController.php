@@ -9,7 +9,7 @@ use Throwable;
 
 class MotherController extends Controller
 {
-    public function getAllMothers(Request $request)
+    public function getAll(Request $request)
     {
         try {
             $mothers = Mother::all();
@@ -38,7 +38,7 @@ class MotherController extends Controller
         }
 
     }
-    public function createMother(Request $request)
+    public function create(Request $request)
     {
         $id = null;
         try {
@@ -71,11 +71,11 @@ class MotherController extends Controller
 
 
     }
-    public function deleteMother(Request $request, $id)
+    public function delete(Request $request, $id)
     {
-        try {
-            $deletedMother = Mother::find($id);
 
+        $deletedMother = Mother::find($id);
+        if ($deletedMother) {
             $mother = $deletedMother;
             $mother->delete();
             $response = [
@@ -85,8 +85,7 @@ class MotherController extends Controller
             ];
             return response()->json($response, 200);
 
-        } catch (Throwable $e) {
-            report($e);
+        } else {
 
             $response = [
                 'success' => false,
@@ -98,19 +97,24 @@ class MotherController extends Controller
 
 
     }
-    public function updateMother(Request $request, $id)
+    public function update(Request $request, $id)
     {
+        $mother = Mother::find($id);
 
 
-        if ($mother = Mother::find($id)) {
+        if ($mother) {
 
             try {
+                $idNew = $request->get('student_id');
+
                 $mother->update($request->validate([
                     'name' => 'string',
                     'phone' => 'string|unique:mothers',
                     'age' => 'integer',
                     'email' => 'string',
+                    'student_id' => 'integer'
                 ]));
+
             } catch (Throwable $e) {
                 report($e);
 
@@ -159,11 +163,12 @@ class MotherController extends Controller
         return response()->json($response, 200);
 
     }
-    // 
+    //
     public function student(Request $request, $id)
     {
-        if (Mother::find($id)) {
-            $mother = Mother::find($id);
+        $mother = Mother::find($id);
+        if ($mother) {
+
             if ($mother != null && $mother->student) {
                 $response = [
                     'success' => true,

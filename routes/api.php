@@ -2,8 +2,10 @@
 use App\Http\Controllers\StudentController;
 use App\Models\Student;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\UserController;
 use App\Models\Teacher;
 use App\Http\Controllers\MotherController;
+use App\Http\Controllers\LoginController;
 use App\Models\Mother;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,78 +23,169 @@ use Illuminate\Support\Facades\DB;
 */
 
 Route::prefix('/students')->group(function () {
-    Route::get(
-        '',
-        [StudentController::class, 'getAllStudents'],
-    );
-    Route::get(
-        '/{id}',
-        [StudentController::class, 'getById'],
-    );
-    Route::post(
-        '',
-        [StudentController::class, 'createStudent'],
-    );
-    Route::patch(
-        '/{id}',
-        [StudentController::class, 'updateStudent'],
-    );
+    Route::controller(StudentController::class)->group(
+        function () {
+            Route::get(
+                '',
+                'getAll',
+            );
+            Route::get(
+                '/{id}',
+                'getById'
+            );
+            Route::post(
+                '',
+                'create'
+            );
+            Route::patch(
+                '/{id}',
+                'update'
+            );
 
-    Route::delete(
-        '/{id}',
-        [StudentController::class, 'deleteStudent'],
+            Route::delete(
+                '/{id}',
+                'delete'
+            );
+            //Middleware
+            Route::middleware('CheckId')->get(
+                '/{id}',
+                'getById'
+            );
+            Route::middleware('CheckId')->delete(
+                '/{id}',
+                'delete'
+            );
+            //Relationships
+            Route::get(
+                '/{id}/teacher',
+                'teacher'
+            );
+            Route::get(
+                '/{id}/mother',
+                'mother'
+            );
+        }
     );
-    Route::middleware('CheckId')->get('/{id}', [StudentController::class, 'getById']);
-    Route::middleware('CheckId')->delete('/{id}', [StudentController::class, 'deleteStudent']);
-    Route::get('/{id}/teacher', [StudentController::class, 'teacher']);
-    Route::get('/{id}/mother', [StudentController::class, 'mother']);
 });
+
+
+
 Route::prefix('/teachers')->group(function () {
-    Route::get(
-        '',
-        [TeacherController::class, 'getAllTeachers'],
-    );
-    Route::get(
-        '/{id}',
-        [TeacherController::class, 'getById'],
-    );
-    Route::post(
-        '',
-        [TeacherController::class, 'createTeacher'],
-    );
-    Route::patch(
-        '/{id}',
-        [TeacherController::class, 'updateTeacher'],
-    );
+    Route::controller(TeacherController::class)->group(
+        function () {
+            Route::get(
+                '',
+                'getAll',
+            );
+            Route::get(
+                '/{id}',
+                'getById'
+            );
+            Route::post(
+                '',
+                'create'
+            );
+            Route::patch(
+                '/{id}',
+                'update'
+            );
 
-    Route::delete(
-        '/{id}',
-        [TeacherController::class, 'deleteTeacher'],
+            Route::delete(
+                '/{id}',
+                'delete'
+            );
+            //Middleware
+            Route::middleware('CheckId')->get(
+                '/{id}',
+                'getById'
+            );
+            Route::middleware('CheckId')->delete(
+                '/{id}',
+                'delete'
+            );
+            //Relationships
+            Route::get(
+                '/{id}/students',
+                'students'
+            );
+        }
     );
-    Route::get('/{id}/students', [TeacherController::class, 'students']);
-
 });
-Route::prefix('/mothers')->group(function () {
-    Route::get(
-        '',
-        [MotherController::class, 'getAllMothers'],
-    );
-    Route::get(
-        '/{id}',
-        [MotherController::class, 'getById'],
-    );
-    Route::post(
-        '',
-        [MotherController::class, 'createMother'],
-    );
-    Route::patch(
-        '/{id}',
-        [MotherController::class, 'updateMother'],
-    );
 
-    Route::delete(
-        '/{id}',
-        [MotherController::class, 'deleteMother'],
+
+
+Route::prefix('/mothers')->group(function () {
+    Route::controller(MotherController::class)->group(
+        function () {
+            Route::get(
+                '',
+                'getAll',
+            );
+            Route::get(
+                '/{id}',
+                'getById'
+            );
+            Route::post(
+                '',
+                'create'
+            );
+            Route::patch(
+                '/{id}',
+                'update'
+            );
+
+            Route::delete(
+                '/{id}',
+                'delete'
+            );
+            //Middleware
+            Route::middleware('CheckId')->get(
+                '/{id}',
+                'getById'
+            );
+            Route::middleware('CheckId')->delete(
+                '/{id}',
+                'delete'
+            );
+            //Relationships
+            Route::get(
+                '/{id}/student',
+                'student'
+            );
+        }
     );
-    Route::get('/{id}/student', [MotherController::class, 'student']);
+});
+
+Route::post('/login', [LoginController::class, 'login']);
+Route::get('/users', [UserController::class, 'getAll']);
+Route::middleware('isLoggedIn')->get('/soyyo', [LoginController::class, 'userInfo']);
+Route::middleware('isLoggedIn')->post('/logOut', [LoginController::class, 'logOut']);
+Route::prefix('/users')->group(function () {
+
+
+
+
+    Route::controller(UserController::class)->group(
+        function () {
+
+            Route::middleware('isLoggedIn')->get(
+                '/{id}',
+                'getById'
+            );
+            Route::middleware('isLoggedIn')->post(
+                '',
+                'create'
+            );
+            Route::middleware('isLoggedIn')->patch(
+                '/{id}',
+                'update'
+            );
+
+            Route::middleware('isLoggedIn')->delete(
+                '/{id}',
+                'delete'
+
+            );
+        }
+    );
 });

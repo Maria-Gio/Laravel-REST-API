@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('teacher_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -24,6 +24,9 @@ return new class extends Migration {
      */
     public function down()
     {
-        //
+        Schema::table('students', function (Blueprint $table) {
+            $table->dropForeign('teacher_id');
+        });
+
     }
 };

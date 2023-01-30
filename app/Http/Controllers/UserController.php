@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teacher;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use TheSeer\Tokenizer\Exception;
-use Throwable;
 
-class TeacherController extends Controller
+class UserController extends Controller
 {
     public function getAll(Request $request)
     {
         try {
-            $teachers = Teacher::all();
+            $users = User::all();
         } catch (Exception $e) {
-            return response('Any teacher found', 200);
+            return response('Any user found', 200);
         }
 
         $response = [];
 
-        if (isset($teachers[0])) {
+        if (isset($users[0])) {
             $response = [
                 'success' => true,
-                'message' => "Teachers fetched successfully",
-                'data' => $teachers
+                'message' => "Users fetched successfully",
+                'data' => $users
             ];
 
             return response()->json($response, 200);
@@ -31,7 +30,7 @@ class TeacherController extends Controller
 
             $response = [
                 'success' => false,
-                'message' => "No teachers found",
+                'message' => "No users found",
                 'data' => null
             ];
             return response()->json($response, 200);
@@ -42,9 +41,9 @@ class TeacherController extends Controller
     {
         $id = null;
         try {
-            $id = Teacher::insertGetId($request->validate([
+            $id = User::insertGetId($request->validate([
                 'name' => 'required|string',
-                'teacherCode' => 'required|string|unique:teachers',
+                'userCode' => 'required|string|unique:users',
                 'email' => 'required|string',
                 'password' => 'required|string',
 
@@ -54,7 +53,7 @@ class TeacherController extends Controller
 
             $response = [
                 'success' => false,
-                'message' => 'Teacher has not been created, some data may be missing',
+                'message' => 'User has not been created, some data may be missing',
                 'data' => null
             ];
             return response()->json($response, 422);
@@ -62,8 +61,8 @@ class TeacherController extends Controller
         if (is_numeric($id)) {
             $response = [
                 'success' => true,
-                'message' => 'Teacher created successfully',
-                'data' => Teacher::findOrFail($id)
+                'message' => 'User created successfully',
+                'data' => User::findOrFail($id)
             ];
             return response()->json($response, 200);
         }
@@ -75,20 +74,20 @@ class TeacherController extends Controller
     public function delete(Request $request, $id)
     {
 
-        $deletedTeacher = Teacher::find($id);
-        if ($deletedTeacher) {
-            $teacher = $deletedTeacher;
-            $teacher->delete();
+        $deletedUser = User::find($id);
+        if ($deletedUser) {
+            $user = $deletedUser;
+            $user->delete();
             $response = [
                 'success' => true,
-                'message' => 'Teacher was deleted',
-                'data' => $deletedTeacher
+                'message' => 'User was deleted',
+                'data' => $deletedUser
             ];
             return response()->json($response, 200);
         } else {
             $response = [
                 'success' => false,
-                'message' => 'Teacher has not been deleted because it wasnt not found',
+                'message' => 'User has not been deleted because it wasnt not found',
                 'data' => null
             ];
             return response()->json($response, 200);
@@ -99,13 +98,13 @@ class TeacherController extends Controller
     public function update(Request $request, $id)
     {
 
-        $teacher = Teacher::find($id);
-        if ($teacher) {
+        $user = User::find($id);
+        if ($user) {
 
             try {
-                $teacher->update($request->validate([
+                $user->update($request->validate([
                     'name' => 'string',
-                    'teacherCode' => 'string|unique:teachers',
+                    'userCode' => 'string|unique:users',
                     'email' => 'string',
                     'password' => 'string',
                 ]));
@@ -114,22 +113,22 @@ class TeacherController extends Controller
 
                 $response = [
                     'success' => false,
-                    'message' => 'Teacher has not been updated',
+                    'message' => 'User has not been updated',
                     'data' => null
                 ];
                 return response()->json($response, 422);
             }
-            $teacher->save();
+            $user->save();
             $response = [
                 'success' => true,
-                'message' => 'Teacher updated successfully',
-                'data' => $teacher
+                'message' => 'User updated successfully',
+                'data' => $user
             ];
             return response()->json($response, 200);
         } else {
             $response = [
                 'success' => false,
-                'message' => 'Teacher not found',
+                'message' => 'User not found',
                 'data' => null
             ];
             return response()->json($response, 200);
@@ -139,51 +138,22 @@ class TeacherController extends Controller
     }
     public function getById(Request $request, $id)
     {
-        $teacher = Teacher::find($id);
-        if ($teacher != null) {
+        $user = User::find($id);
+        if ($user != null) {
             $response = [
                 'success' => true,
-                'message' => 'Teacher found successfully',
-                'data' => $teacher
+                'message' => 'User found successfully',
+                'data' => $user
             ];
         } else {
             $response = [
                 'success' => false,
-                'message' => 'Teacher not found',
+                'message' => 'User not found',
                 'data' => null
             ];
         }
 
         return response()->json($response, 200);
 
-    }
-    public function students(Request $request, $id)
-    {
-        $teacher = Teacher::find($id);
-        if ($teacher) {
-
-            if ($teacher != null && $teacher->student) {
-                $response = [
-                    'success' => true,
-                    'message' => 'Student found successfully',
-                    'data' => $teacher->student
-                ];
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => 'Student not found',
-                    'data' => null
-                ];
-            }
-        } else {
-            $response = [
-                'success' => false,
-                'message' => 'Teacher not found',
-                'data' => null
-            ];
-        }
-
-
-        return response()->json($response, 200);
     }
 }
