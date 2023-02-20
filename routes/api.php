@@ -156,10 +156,20 @@ Route::prefix('/mothers')->group(function () {
     );
 });
 
-Route::post('/login', [LoginController::class, 'login']);
+//RUTAS PASSPORT
+
+Route::post('/login', [LoginController::class, 'logIn']);
+Route::post('signin', [LoginController::class, 'signUp']);
+
+Route::group(['middleware' => 'auth:api'],
+    function () {
+        Route::post('/logout', [LoginController::class, 'logOut']);
+        Route::get('/soyyo', [LoginController::class, 'userInfo']);
+    }
+);
+
+//previas
 Route::get('/users', [UserController::class, 'getAll']);
-Route::middleware('isLoggedIn')->get('/soyyo', [LoginController::class, 'userInfo']);
-Route::middleware('isLoggedIn')->post('/logOut', [LoginController::class, 'logOut']);
 Route::prefix('/users')->group(function () {
 
 

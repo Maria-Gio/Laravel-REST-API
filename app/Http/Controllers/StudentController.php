@@ -15,7 +15,7 @@ class StudentController extends Controller
         try {
             $students = Student::all();
         } catch (Exception $e) {
-            return response('Any student found', 200);
+            return response('Any student found');
         }
 
         $response = [];
@@ -27,7 +27,7 @@ class StudentController extends Controller
                 'data' => $students
             ];
 
-            return response()->json($response, 200);
+            return response()->json($response);
         } else {
 
             $response = [
@@ -35,7 +35,7 @@ class StudentController extends Controller
                 'message' => "No students found",
                 'data' => null
             ];
-            return response()->json($response, 200);
+            return response()->json($response);
         }
 
     }
@@ -67,7 +67,7 @@ class StudentController extends Controller
                 'message' => 'Student created successfully',
                 'data' => Student::findOrFail($id)
             ];
-            return response()->json($response, 200);
+            return response()->json($response);
         }
 
 
@@ -85,14 +85,14 @@ class StudentController extends Controller
                 'message' => 'Student was deleted',
                 'data' => $deletedStudent
             ];
-            return response()->json($response, 200);
+            return response()->json($response);
         } else {
             $response = [
                 'success' => false,
                 'message' => 'Student has not been deleted because it wasnt not found',
                 'data' => null
             ];
-            return response()->json($response, 200);
+            return response()->json($response);
         }
 
     }
@@ -129,14 +129,14 @@ class StudentController extends Controller
                 'message' => 'Student updated successfully',
                 'data' => $student
             ];
-            return response()->json($response, 200);
+            return response()->json($response);
         } else {
             $response = [
                 'success' => false,
                 'message' => 'Student not found',
                 'data' => null
             ];
-            return response()->json($response, 200);
+            return response()->json($response);
         }
 
 
@@ -158,7 +158,7 @@ class StudentController extends Controller
             ];
         }
 
-        return response()->json($response, 200);
+        return response()->json($response);
 
     }
     public function teacher(Request $request, $id)
@@ -187,7 +187,7 @@ class StudentController extends Controller
             ];
         }
 
-        return response()->json($response, 200);
+        return response()->json($response);
     }
     public function mother(Request $request, $id)
     {
@@ -216,6 +216,6 @@ class StudentController extends Controller
             ];
         }
 
-        return response()->json($response, 200);
+        return response()->json($response);
     }
 }
